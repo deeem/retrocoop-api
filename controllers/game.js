@@ -1,5 +1,5 @@
 const Game = require('../models/game')
-const asyncHandler = require('../middleware/asyncHandler')
+const asyncHandler = require('../middlewares/asyncHandler')
 
 exports.index = asyncHandler(async (req, res, next) => {
   const games = await Game.find()

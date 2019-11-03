@@ -4,7 +4,7 @@ const path = require('path')
 const colors = require('colors')
 
 const connectDB = require('./config/db')
-const errorHandler = require('./middleware/errorHandler')
+const errorHandler = require('./middlewares/errorHandler')
 const games = require('./routes/game')
 
 dotenv.config({path: './config/.env'})
