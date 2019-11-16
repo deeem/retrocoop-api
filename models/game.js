@@ -7,7 +7,8 @@ const GamesSchema = new mongoose.Schema(
       required: [true, 'Game Title is required']
     },
     description: String,
-    images: String
+    images: Array,
+    platform: String,
   },
   {
     toJSON: { virtuals: true },
