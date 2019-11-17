@@ -8,6 +8,7 @@ dotenv.config({ path: './config/.env' })
 
 const Request = require('../models/request')
 const Game = require('../models/game')
+const User = require('../models/user')
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -29,7 +30,7 @@ const deleteData = async () => {
 const createData = async () => {
   let requests = []
 
-  for (let dayCounter = 0; dayCounter < 31; dayCounter++) {
+  for (let dayCounter = 0; dayCounter < 3; dayCounter++) {
     for (let requestCounter = 0; requestCounter < 3; requestCounter++) {
       let startDate = moment()
         .add(dayCounter, 'd')
@@ -38,7 +39,10 @@ const createData = async () => {
         .second(0)
         .add(faker.random.number(23), 'h')
 
+      const user = await User.random()
+
       const request = {
+        user: user.id,
         starts_at: startDate.toDate(),
         ends_at: startDate.add(faker.random.number(5) + 1, 'h').toDate(),
         use_mic: faker.random.boolean(),
