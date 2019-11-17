@@ -7,6 +7,7 @@ const connectDB = require('./config/db')
 const errorHandler = require('./middlewares/errorHandler')
 const games = require('./routes/game')
 const requests = require('./routes/request')
+const users = require('./routes/user')
 
 dotenv.config({path: './config/.env'})
 
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/games', games)
 app.use('/api/requests', requests)
+app.use('/api/users', users)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3003
