@@ -34,7 +34,7 @@ const createData = (games, platform) => {
     return {
       platform: platform,
       title: item.title,
-      description: faker.random.words,
+      description: faker.random.words(),
       images: item.images.map(image => {
         return process.env.HOST + ':' + process.env.PORT + '/' + image
       })
