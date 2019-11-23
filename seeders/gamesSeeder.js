@@ -7,6 +7,7 @@ const faker = require('faker')
 dotenv.config({ path: './config/.env' })
 
 const Game = require('../models/game')
+const Platform = require('../models/platform')
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -30,11 +31,11 @@ const deleteData = async () => {
 }
 
 const createData = (games, platform) => {
-  return games[platform].map(item => {
+  return games[platform.slug].map(item => {
     return {
-      platform: platform,
+      platform: platform._id,
       title: item.title,
-      description: faker.random.words(),
+      description: faker.lorem.paragraph(),
       images: item.images.map(image => {
         return process.env.HOST + ':' + process.env.PORT + '/' + image
       })
@@ -44,10 +45,32 @@ const createData = (games, platform) => {
 
 const importData = async () => {
   try {
-    await Game.create(createData(games, 'zx'))
-    await Game.create(createData(games, 'nes'))
-    await Game.create(createData(games, 'snes'))
-    await Game.create(createData(games, 'smd'))
+    const platforms = await Platform.find()
+
+    await Game.create(
+      createData(
+        games,
+        platforms.find(platform => (platform.slug = 'zx'))
+      )
+    )
+    await Game.create(
+      createData(
+        games,
+        platforms.find(platform => (platform.slug = 'nes'))
+      )
+    )
+    await Game.create(
+      createData(
+        games,
+        platforms.find(platform => (platform.slug = 'snes'))
+      )
+    )
+    await Game.create(
+      createData(
+        games,
+        platforms.find(platform => (platform.slug = 'smd'))
+      )
+    )
 
     console.log('DATA IMPORTED...'.green.inverse)
     process.exit()

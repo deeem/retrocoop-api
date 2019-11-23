@@ -1,8 +1,13 @@
-const Game = require('../models/game')
 const asyncHandler = require('../middlewares/asyncHandler')
+const Game = require('../models/game')
+const Platform = require('../models/platform')
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const games = await Game.find()
+  const games = await Game.find().populate({
+    path: 'platform',
+    model: Platform,
+    select: 'title slug'
+  })
 
   res.json({ success: true, count: games.length, data: games })
 })
