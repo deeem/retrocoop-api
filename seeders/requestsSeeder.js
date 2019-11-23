@@ -9,6 +9,7 @@ dotenv.config({ path: './config/.env' })
 const Request = require('../models/request')
 const Game = require('../models/game')
 const User = require('../models/user')
+const Platform = require('../models/platform')
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -27,7 +28,16 @@ const deleteData = async () => {
   }
 }
 
+const fetchPlatformIds = async () => {
+  const platforms = await Platform.find()
+
+  return platforms.map(platform => platform.id)
+}
+
 const createData = async () => {
+
+  const platforms = await fetchPlatformIds()
+
   let requests = []
 
   for (let dayCounter = 0; dayCounter < 3; dayCounter++) {
@@ -39,10 +49,10 @@ const createData = async () => {
         .second(0)
         .add(faker.random.number(23), 'h')
 
-      const user = await User.random()
+      const player1 = await User.random()
 
       const request = {
-        user: user.id,
+        player1: player1.id,
         starts_at: startDate.toDate(),
         ends_at: startDate.add(faker.random.number(5) + 1, 'h').toDate(),
         use_mic: faker.random.boolean(),
@@ -50,15 +60,15 @@ const createData = async () => {
       }
 
       if (faker.random.boolean()) {
-        request.platform = faker.random.arrayElement([
-          'zx',
-          'nes',
-          'snes',
-          'smd'
-        ])
+        request.platform = faker.random.arrayElement(platforms)
       } else {
         const game = await Game.random()
         request.game = game.id
+      }
+
+      if (faker.random.boolean()) {
+        const player2 = await User.random()
+        request.player2 = player2.id
       }
 
       requests.push(request)
