@@ -1,15 +1,20 @@
 const asyncHandler = require('../middlewares/asyncHandler')
 const Game = require('../models/game')
 const Platform = require('../models/platform')
+const paginate = require('../utils/paginate')
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const games = await Game.find().populate({
+
+  const pagination = await paginate(Game, res.modelQuery, req)
+
+  const games = await res.modelQuery
+  .populate({
     path: 'platform',
     model: Platform,
     select: 'title slug'
   })
 
-  res.json({ success: true, count: games.length, data: games })
+  res.json({ success: true, count: games.length, data: games, pagination })
 })
 
 exports.store = asyncHandler(async (req, res, next) => {
