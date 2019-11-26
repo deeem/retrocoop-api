@@ -26,13 +26,44 @@ const sort = (query, req) => {
     : query.sort('-createdAt')
 }
 
-const modelQuery = model => (req, res, next) => {
-  let query
-  query = filter(model, req)
-  query = select(query, req)
-  query = sort(query, req)
+const paginate = async (model, query, req) => {
+  const page = parseInt(req.query.page, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 25
+  const startIndex = (page - 1) * limit
+  const endIndex = page * limit
+
+  const total = await model.count(query).exec()
+
+  query = query.skip(startIndex).limit(limit)
+
+  const pagination = {}
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit
+    }
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit
+    }
+  }
+
+  return pagination
+}
+
+const modelQuery = model => async (req, res, next) => {
+  let query = filter(model, req)
+  select(query, req)
+  sort(query, req)
+
+  pagination = await paginate(model, query, req)
 
   res.modelQuery = query
+  res.pagination = pagination
   next()
 }
 
