@@ -26,6 +26,11 @@ UserSchema.virtual('requests_player2', {
   justOne: false
 })
 
+UserSchema.pre('remove', async function(next) {
+  await this.model('Request').deleteMany({ player1: this._id, player2: this._id })
+  next()
+})
+
 UserSchema.statics.random = async function() {
   const count = await this.countDocuments()
   const rand = Math.floor(Math.random() * count)
