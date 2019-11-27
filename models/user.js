@@ -12,6 +12,20 @@ const UserSchema = new mongoose.Schema(
   }
 )
 
+UserSchema.virtual('requests_player1', {
+  ref: 'Request',
+  localField: '_id',
+  foreignField: 'player1',
+  justOne: false
+})
+
+UserSchema.virtual('requests_player2', {
+  ref: 'Request',
+  localField: '_id',
+  foreignField: 'player2',
+  justOne: false
+})
+
 UserSchema.statics.random = async function() {
   const count = await this.countDocuments()
   const rand = Math.floor(Math.random() * count)

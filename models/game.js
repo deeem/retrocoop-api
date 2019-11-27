@@ -16,6 +16,13 @@ const GamesSchema = new mongoose.Schema(
   }
 )
 
+GamesSchema.virtual('requests', {
+  ref: 'Request',
+  localField: '_id',
+  foreignField: 'game',
+  justOne: false
+})
+
 GamesSchema.statics.random = async function() {
   const count = await this.countDocuments();
   const rand = Math.floor(Math.random() * count);
