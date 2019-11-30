@@ -1,5 +1,6 @@
-const Platform = require('../models/platform')
 const asyncHandler = require('../middlewares/asyncHandler')
+const ErrorResponse = require('../utils/errorResponse')
+const Platform = require('../models/platform')
 
 exports.index = asyncHandler(async (req, res, next) => {
   const platforms = await Platform.find()
@@ -12,7 +13,13 @@ exports.store = asyncHandler(async (req, res, next) => {
 })
 
 exports.show = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in show action' })
+  const data = await Platform.findById(req.params.id)
+
+  if (!data) {
+    next(new ErrorResponse('No resource found'))
+  }
+
+  res.json({ success: true, data })
 })
 
 exports.update = asyncHandler(async (req, res, next) => {

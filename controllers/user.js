@@ -1,5 +1,6 @@
-const User = require('../models/user')
 const asyncHandler = require('../middlewares/asyncHandler')
+const ErrorResponse = require('../utils/errorResponse')
+const User = require('../models/user')
 
 exports.index = asyncHandler(async (req, res, next) => {
   const users = await User.find()
@@ -12,7 +13,13 @@ exports.store = asyncHandler(async (req, res, next) => {
 })
 
 exports.show = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in show action' })
+  const data = await User.findById(req.params.id)
+
+  if (!data) {
+    next(new ErrorResponse('No resource found'))
+  }
+
+  res.json({ success: true, data })
 })
 
 exports.update = asyncHandler(async (req, res, next) => {
