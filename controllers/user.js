@@ -31,5 +31,12 @@ exports.update = asyncHandler(async (req, res, next) => {
 })
 
 exports.destroy = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+
+  if (!user) {
+    return next(new ErrorResponse('No resource found'))
+  }
+
+  user.remove()
   res.json({ success: true, data: 'in destroy action' })
 })

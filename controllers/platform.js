@@ -9,7 +9,9 @@ exports.index = asyncHandler(async (req, res, next) => {
 })
 
 exports.store = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in store action' })
+  await Platform.create(req.body)
+
+  res.json({ success: true })
 })
 
 exports.show = asyncHandler(async (req, res, next) => {
@@ -23,9 +25,19 @@ exports.show = asyncHandler(async (req, res, next) => {
 })
 
 exports.update = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in update action' })
+  await Platform.findByIdAndUpdate(req.params.id, req.body)
+
+  res.json({ success: true })
 })
 
 exports.destroy = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in destroy action' })
+  const platform = await Platform.findById(req.params.id)
+
+  if (!platform) {
+    return next(new ErrorResponse('No resource found'))
+  }
+
+  platform.remove()
+
+  res.json({ success: true })
 })
