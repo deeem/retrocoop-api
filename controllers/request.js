@@ -34,7 +34,9 @@ exports.index = asyncHandler(async (req, res, next) => {
 })
 
 exports.store = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in store action' })
+  await Request.create(req.body)
+
+  res.json({ success: true })
 })
 
 exports.show = asyncHandler(async (req, res, next) => {
@@ -48,9 +50,19 @@ exports.show = asyncHandler(async (req, res, next) => {
 })
 
 exports.update = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in update action' })
+  await Request.findByIdAndUpdate(req.params.id, req.body)
+
+  res.json({ success: true })
 })
 
 exports.destroy = asyncHandler(async (req, res, next) => {
-  res.json({ success: true, data: 'in destroy action' })
+  const request = await Request.findById(req.params.id)
+
+  if (!request) {
+    return next(new ErrorResponse('No resource found'))
+  }
+
+  request.remove()
+
+  res.json({ success: true })
 })
