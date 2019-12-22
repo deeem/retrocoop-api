@@ -1,17 +1,26 @@
-const filter = (model, req) => {
+const filterLike = (query, req) => {
+  for (let key in req.query) {
+    let item = req.query[key]
+
+    if (typeof item === 'object' && item.hasOwnProperty('like')) {
+      query.find({ [key]: { $regex: item.like, $options: 'i' } })
+      delete req.query[key]
+    }
+  }
+}
+
+const filter = (query, req) => {
   const requestQuery = { ...req.query }
 
   // fields to exclude
   const removeFields = ['select', 'sort', 'page', 'limit']
-
   removeFields.forEach(param => delete requestQuery[param])
 
-  let queryStr = JSON.stringify(requestQuery)
-
   // create operators ($gt, $lt, ..etc)
+  let queryStr = JSON.stringify(requestQuery)
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`)
 
-  return model.find(JSON.parse(queryStr))
+  return query.find(JSON.parse(queryStr))
 }
 
 const select = (query, req) => {
@@ -56,11 +65,15 @@ const paginate = async (model, query, req) => {
 }
 
 const modelQuery = model => async (req, res, next) => {
-  let query = filter(model, req)
-  select(query, req)
-  sort(query, req)
+  let query = model.find({})
+  let request = req
 
-  pagination = await paginate(model, query, req)
+  filterLike(query, request)
+  filter(query, request)
+  select(query, request)
+  sort(query, request)
+
+  pagination = await paginate(model, query, request)
 
   res.modelQuery = query
   res.pagination = pagination
