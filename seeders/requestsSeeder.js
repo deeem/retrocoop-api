@@ -40,7 +40,7 @@ const createData = async () => {
 
   let requests = []
 
-  for (let dayCounter = 0; dayCounter < 3; dayCounter++) {
+  for (let dayCounter = 0; dayCounter < 30; dayCounter++) {
     for (let requestCounter = 0; requestCounter < 3; requestCounter++) {
       let startDate = moment()
         .add(dayCounter, 'd')
