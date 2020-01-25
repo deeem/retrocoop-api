@@ -1,9 +1,13 @@
 const validate = schema => async (req, res, next) => {
-  const { error, value } = schema.validate(req.body)
+  const { error } = schema.validate(req.body)
 
   if (error) {
-    console.log(error)
-    return res.json({ success: false, error: error })
+    const errors = error.details.reduce(
+      (acc, item) => ({ ...acc, [item.context.key]: item.message }),
+      {}
+    )
+
+    return res.status(422).json({ errors })
   }
 
   next()
