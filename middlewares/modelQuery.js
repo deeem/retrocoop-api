@@ -1,9 +1,11 @@
+const escapeStringRegexp = require('escape-string-regexp');
+
 const filterLike = (query, req) => {
   for (let key in req.query) {
     let item = req.query[key]
 
     if (typeof item === 'object' && item.hasOwnProperty('like')) {
-      query.find({ [key]: { $regex: item.like, $options: 'i' } })
+      query.find({ [key]: { $regex: escapeStringRegexp(item.like), $options: 'i' } })
       delete req.query[key]
     }
   }
