@@ -1,6 +1,6 @@
 const asyncHandler = require('../middlewares/asyncHandler')
 const ErrorResponse = require('../utils/errorResponse')
-const Request = require('../models/request')
+const Coop = require('../models/coop')
 const User = require('../models/user')
 const Game = require('../models/game')
 const Platform = require('../models/platform')
@@ -28,19 +28,19 @@ const populateFields = [
 ]
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const requests = await Request.find().populate(populateFields)
+  const data = await Coop.find().populate(populateFields)
 
-  res.json({ success: true, count: requests.length, data: requests })
+  res.json({ success: true, count: data.length, data })
 })
 
 exports.store = asyncHandler(async (req, res, next) => {
-  await Request.create(req.body)
+  await Coop.create(req.body)
 
   res.json({ success: true })
 })
 
 exports.show = asyncHandler(async (req, res, next) => {
-  const data = await Request.findById(req.params.id).populate(populateFields)
+  const data = await Coop.findById(req.params.id).populate(populateFields)
 
   if (!data) {
     next(new ErrorResponse('No resource found'))
@@ -50,19 +50,19 @@ exports.show = asyncHandler(async (req, res, next) => {
 })
 
 exports.update = asyncHandler(async (req, res, next) => {
-  await Request.findByIdAndUpdate(req.params.id, req.body)
+  await Coop.findByIdAndUpdate(req.params.id, req.body)
 
   res.json({ success: true })
 })
 
 exports.destroy = asyncHandler(async (req, res, next) => {
-  const request = await Request.findById(req.params.id)
+  const coop = await Coop.findById(req.params.id)
 
-  if (!request) {
+  if (!coop) {
     return next(new ErrorResponse('No resource found'))
   }
 
-  request.remove()
+  coop.remove()
 
   res.json({ success: true })
 })

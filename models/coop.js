@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const RequestSchema = new mongoose.Schema(
+const CoopSchema = new mongoose.Schema(
   {
     starts_at: Date,
     ends_at: Date,
@@ -17,4 +17,4 @@ const RequestSchema = new mongoose.Schema(
   }
 )
 
-module.exports = mongoose.model('Request', RequestSchema)
+module.exports = mongoose.model('Coop', CoopSchema)

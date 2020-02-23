@@ -6,7 +6,7 @@ const moment = require('moment')
 
 dotenv.config({ path: './config/.env' })
 
-const Request = require('../models/request')
+const Coop = require('../models/coop')
 const Game = require('../models/game')
 const User = require('../models/user')
 const Platform = require('../models/platform')
@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const deleteData = async () => {
   try {
-    await Request.deleteMany()
+    await Coop.deleteMany()
     console.log('DATA DELETED...'.red.inverse)
     process.exit()
   } catch (error) {
@@ -38,10 +38,10 @@ const createData = async () => {
 
   const platforms = await fetchPlatformIds()
 
-  let requests = []
+  let coops = []
 
   for (let dayCounter = 0; dayCounter < 30; dayCounter++) {
-    for (let requestCounter = 0; requestCounter < 3; requestCounter++) {
+    for (let coopCounter = 0; coopCounter < 3; coopCounter++) {
       let startDate = moment()
         .add(dayCounter, 'd')
         .hour(1)
@@ -51,7 +51,7 @@ const createData = async () => {
 
       const player1 = await User.random()
 
-      const request = {
+      const coop = {
         player1: player1.id,
         starts_at: startDate.toDate(),
         ends_at: startDate.add(faker.random.number(5) + 1, 'h').toDate(),
@@ -60,22 +60,22 @@ const createData = async () => {
       }
 
       if (faker.random.boolean()) {
-        request.platform = faker.random.arrayElement(platforms)
+        coop.platform = faker.random.arrayElement(platforms)
       } else {
         const game = await Game.random()
-        request.game = game.id
+        coop.game = game.id
       }
 
       if (faker.random.boolean()) {
         const player2 = await User.random()
-        request.player2 = player2.id
+        coop.player2 = player2.id
       }
 
-      requests.push(request)
+      coops.push(coop)
     }
   }
 
-  await Request.create(requests)
+  await Coop.create(coops)
 }
 
 const importData = async () => {

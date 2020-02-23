@@ -2,7 +2,7 @@ const express = require('express')
 const Joi = require('@hapi/joi');
 
 const validate = require('../middlewares/validate')
-const { index, store, show, update, destroy } = require('../controllers/request')
+const { index, store, show, update, destroy } = require('../controllers/coop')
 
 const router = express.Router()
 

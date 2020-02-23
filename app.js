@@ -8,7 +8,7 @@ const connectDB = require('./config/db')
 const errorHandler = require('./middlewares/errorHandler')
 
 const games = require('./routes/game')
-const requests = require('./routes/request')
+const coops = require('./routes/coop')
 const users = require('./routes/user')
 const platforms = require('./routes/platform')
 
@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(cors())
 
 app.use('/api/games', games)
-app.use('/api/requests', requests)
+app.use('/api/coops', coops)
 app.use('/api/users', users)
 app.use('/api/platforms', platforms)
 

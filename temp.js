@@ -1,35 +1,48 @@
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
-
-dotenv.config({ path: './config/.env' })
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-})
-
-const Request = require('./models/request')
-const Game = require('./models/game')
-const User = require('./models/user')
-const Platform = require('./models/platform')
-
-const main = async () => {
-  // res = await User.find().select('id').exec()
-  res2 = await User.findById('5dd15da9fa600e67025418f6')
-  .populate('requests_player1')
-  .populate('requests_player2')
-
-  // res = await Platform.fsind().exec()
-//   res = await Platform.findById('5dd92164077584064fbce007').populate('games')
-
-//   res = await Game.findById('5dd956ce122ef432a5aafec0')
-//     .populate('requests')
-
-  console.log(res)
-
-  process.exit()
+const obj = {
+  pack1: [
+    { name: 'theme1', cat: 'pack1' },
+    { name: 'theme2', cat: 'pack1' },
+    { name: 'theme3', cat: 'pack1' }
+  ],
+  pack2: [
+    { name: 'theme1', cat: 'pack2' },
+    { name: 'theme2', cat: 'pack2' },
+    { name: 'theme3', cat: 'pack2' }
+  ],
+  pack3: [
+    { name: 'theme1', cat: 'pack3' },
+    { name: 'theme2', cat: 'pack3' },
+    { name: 'theme3', cat: 'pack3' }
+  ],
+  pack4: [
+    { name: 'theme1', cat: 'pack4' },
+    { name: 'theme2', cat: 'pack4' },
+    { name: 'theme3', cat: 'pack4' }
+  ],
+  pack5: [
+    { name: 'theme1', cat: 'pack5' },
+    { name: 'theme2', cat: 'pack5' },
+    { name: 'theme3', cat: 'pack5' }
+  ],
+  pack6: [
+    { name: 'theme1', cat: 'pack6' },
+    { name: 'theme2', cat: 'pack6' },
+    { name: 'theme3', cat: 'pack6' }
+  ],
+  pack7: [
+    { name: 'theme1', cat: 'pack7' },
+    { name: 'theme2', cat: 'pack7' },
+    { name: 'theme3', cat: 'pack7' }
+  ]
 }
 
-main()
+function* makeThemeGenerator() {
+  const themes = Object.keys(obj)
+
+  for (theme in themes) {
+    yield obj[themes[theme]]
+  }
+}
+
+const g = makeThemeGenerator();
+console.log(...g)
