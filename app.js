@@ -1,5 +1,4 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const path = require('path')
 const colors = require('colors')
 const cors = require('cors')
@@ -11,8 +10,6 @@ const games = require('./routes/game')
 const coops = require('./routes/coop')
 const users = require('./routes/user')
 const platforms = require('./routes/platform')
-
-dotenv.config({path: './config/.env'})
 
 connectDB()
 
@@ -29,7 +26,7 @@ app.use('/api/platforms', platforms)
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 3003
+const PORT = process.env.PORT || 8080
 
 const server = app.listen(
   PORT,
