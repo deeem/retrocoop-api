@@ -1,18 +1,10 @@
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
 const colors = require('colors')
 const faker = require('faker')
+const connectDB = require('../utils/connectDB')
 
-dotenv.config({ path: './config/.env' })
+connectDB()
 
 const User = require('../models/user')
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-})
 
 const deleteData = async () => {
   try {

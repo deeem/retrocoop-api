@@ -1,20 +1,13 @@
 const fs = require('fs')
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
 const colors = require('colors')
 const faker = require('faker')
 
-dotenv.config({ path: './config/.env' })
+const connectDB = require('../utils/connectDB')
+
+connectDB()
 
 const Game = require('../models/game')
 const Platform = require('../models/platform')
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-})
 
 const games = JSON.parse(
   fs.readFileSync(`${__dirname}/../public/games.json`, 'utf-8')

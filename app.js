@@ -3,7 +3,7 @@ const path = require('path')
 const colors = require('colors')
 const cors = require('cors')
 
-const connectDB = require('./config/db')
+const connectDB = require('./utils/connectDB')
 const errorHandler = require('./middlewares/errorHandler')
 
 const games = require('./routes/game')
