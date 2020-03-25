@@ -30,7 +30,7 @@ const createData = (games, platform) => {
       title: item.title,
       description: faker.lorem.paragraph(),
       images: item.images.map(image => {
-        return process.env.HOST + ':' + process.env.PORT + '/' + image
+        return process.env.APP_HOST + ':' + process.env.APP_PORT + '/' + image
       })
     }
   })
