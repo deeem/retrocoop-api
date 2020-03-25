@@ -5,8 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # image: nodejs
-    # container_name: nodejs
     restart: unless-stopped
     env_file: .env
     environment:
@@ -16,7 +14,7 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
     ports:
-      - "90:8080"
+      - $APP_PORT:8080
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
@@ -26,7 +24,6 @@ services:
 
   db:
     image: mongo:4.1.8-xenial
-    container_name: db
     restart: unless-stopped
     env_file: .env
     environment:
@@ -35,7 +32,7 @@ services:
     volumes:
       - dbdata:/data/db
     ports:
-      - "27018:27017"
+      - $DB_PORT:27017
     networks:
       - app-network
 
